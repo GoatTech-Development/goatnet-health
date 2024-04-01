@@ -1,5 +1,5 @@
 <template>
-  <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem"/>
+  <Chart ref="primeChart" type="line" :data="chartData" :options="chartOptions" class="h-30rem"/>
 </template>
 
 <script setup>
@@ -27,7 +27,6 @@ let chartData = ref({
     }
   ]
 });
-
 const chartOptions = {
   responsive: true,
   animation: {
@@ -49,9 +48,48 @@ const chartOptions = {
   }
 };
 
-onMounted(() => {
-  setInterval(() => {
-    chartData.value.datasets[0].data = chartData.value.datasets[0].data.map(() => Math.floor(Math.random() * 100));
-  }, 5000);
-});
+const primeChart = ref();
+
+// const addData = (label, data) => {
+//   const chart = primeChart.value.chart;
+//   chart.data.labels.push(label);
+//   chart.data.datasets[0].data.push(data);
+//   chart.update();
+// };
+
+let isUpdating = ref(false);
+
+const addData = async (label, data) => {
+  while (isUpdating.value) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  isUpdating.value = true;
+  const chart = primeChart.value.chart;
+  chart.data.labels.push(label);
+  chart.data.datasets[0].data.push(data);
+  chart.update();
+  isUpdating.value = false;
+};
+
+const shiftData = async () => {
+  while (isUpdating.value) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  isUpdating.value = true;
+  if (chartData.value.datasets[0].data.length > 0) {
+    console.log('Before shift operation: ', chartData.value.datasets[0].data);
+    // Convert the Proxy object to a regular array
+    let dataArray = Array.from(chartData.value.datasets[0].data);
+    dataArray.shift();
+    // Assign the modified array back to the data property
+    chartData.value.datasets[0].data = dataArray;
+    console.log('After shift operation: ', chartData.value.datasets[0].data);
+  }
+  isUpdating.value = false;
+  setTimeout(shiftData, 5000);
+};
+
+onMounted(shiftData);
 </script>
