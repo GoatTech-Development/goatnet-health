@@ -4,7 +4,7 @@
 
 <script setup>
 import Chart from 'primevue/chart';
-import {onMounted, ref} from "vue";
+import {nextTick, onMounted, ref} from "vue";
 
 function getGradient(chart) {
   const ctx = chart.ctx;
@@ -14,7 +14,7 @@ function getGradient(chart) {
   return gradient;
 }
 
-let chartData = ref({
+let chartData = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
     {
@@ -26,7 +26,7 @@ let chartData = ref({
       backgroundColor: (context) => getGradient(context.chart)
     }
   ]
-});
+};
 const chartOptions = {
   responsive: true,
   animation: {
@@ -50,46 +50,30 @@ const chartOptions = {
 
 const primeChart = ref();
 
-// const addData = (label, data) => {
-//   const chart = primeChart.value.chart;
-//   chart.data.labels.push(label);
-//   chart.data.datasets[0].data.push(data);
-//   chart.update();
-// };
-
-let isUpdating = ref(false);
-
-const addData = async (label, data) => {
-  while (isUpdating.value) {
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
-
-  isUpdating.value = true;
-  const chart = primeChart.value.chart;
-  chart.data.labels.push(label);
-  chart.data.datasets[0].data.push(data);
-  chart.update();
-  isUpdating.value = false;
-};
-
-const shiftData = async () => {
-  while (isUpdating.value) {
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
-
-  isUpdating.value = true;
-  if (chartData.value.datasets[0].data.length > 0) {
-    console.log('Before shift operation: ', chartData.value.datasets[0].data);
-    // Convert the Proxy object to a regular array
-    let dataArray = Array.from(chartData.value.datasets[0].data);
+const shiftData = () => {
+  if (chartData.datasets[0].data.length > 0) {
+    let dataArray = Array.from(chartData.datasets[0].data);
     dataArray.shift();
-    // Assign the modified array back to the data property
-    chartData.value.datasets[0].data = dataArray;
-    console.log('After shift operation: ', chartData.value.datasets[0].data);
+    chartData.datasets[0].data = dataArray;
   }
-  isUpdating.value = false;
+
   setTimeout(shiftData, 5000);
 };
 
-onMounted(shiftData);
+const addData = (data) => {
+  chartData.datasets[0].data.push(data);
+
+  // update chart
+  primeChart.value.refresh();
+
+  setTimeout(() => {
+    addData(Math.random() * 100);
+  }, 5000);
+};
+
+onMounted(async () => {
+  await nextTick();
+  await shiftData();
+  await addData(Math.random() * 100);
+});
 </script>

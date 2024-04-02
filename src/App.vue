@@ -9,7 +9,7 @@ import PingLatencyChart from "@/components/PingLatencyChart.vue";
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125"/>
 
     <div class="wrapper">
-      <HelloWorld msg="GoatNet Latency to www.google.com"/>
+      <HelloWorld msg="GoatNet Latency to google.com"/>
     </div>
   </header>
 
