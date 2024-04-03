@@ -5,6 +5,14 @@
 <script setup>
 import Chart from 'primevue/chart';
 import {nextTick, onMounted, ref} from "vue";
+import {setupWebSocket} from "@/services/websocketService.js";
+
+// Setup websocket connection
+const ws = ref(null);
+
+onMounted(() => {
+  ws.value = setupWebSocket(updateChartData);
+})
 
 function getGradient(chart) {
   const ctx = chart.ctx;
@@ -27,6 +35,7 @@ let chartData = {
     }
   ]
 };
+
 const chartOptions = {
   responsive: true,
   animation: {
@@ -45,7 +54,14 @@ const chartOptions = {
     backgroundColor: '#FFFFFF',
     titleFontColor: '#000000',
     bodyFontColor: '#000000'
-  }
+  },
+  elements: {
+    point: {
+      // Hide points on chart unless mouse-over
+      radius: 0,
+      hitRadius: 100,
+    },
+  },
 };
 
 const primeChart = ref();
@@ -69,6 +85,21 @@ const addData = (data) => {
   setTimeout(() => {
     addData(Math.random() * 100);
   }, 5000);
+};
+
+const updateChartData = (latency) => {
+  // Shift the old data
+  if (chartData.datasets[0].data.length > 0) {
+    let dataArray = Array.from(chartData.datasets[0].data);
+    dataArray.shift();
+    chartData.datasets[0].data = dataArray;
+  }
+
+  // Add the new latency value
+  chartData.datasets[0].data.push(latency);
+
+  // Update the chart
+  primeChart.value.refresh();
 };
 
 onMounted(async () => {
