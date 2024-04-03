@@ -11,6 +11,8 @@
   "dependencies": {
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^3.6.0",
     "ping.js": "^0.3.0",
     "primevue": "^3.50.0",
     "vue": "^3.4.21",
