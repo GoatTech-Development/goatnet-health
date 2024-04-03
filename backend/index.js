@@ -3,30 +3,35 @@ var app = express();
 var expressWs = require('express-ws')(app);
 var ping = require('ping');
 
-app.use(function (req, res, next) {
-    console.log('middleware');
-    req.testing = 'testing';
-    return next();
-});
-
-app.get('/', function (req, res, next) {
-    console.log('get route', req.testing);
-    res.end();
-});
+// Keep track of active WebSocket connections and their corresponding intervals
+var connections = new Map();
 
 app.ws('/', function (ws, req) {
+    // Ping Google every 5 seconds and send the latency over the WebSocket connection
+    var interval = setInterval(function () {
+        ping.promise.probe('google.com')
+            .then(function (res) {
+                // Send the latency to the active WebSocket connection
+                if (ws.readyState === ws.OPEN) {
+                    ws.send(res.time);
+                }
+                // log the latency to the console with time in PST
+                console.log('Latency:', res.time, 'ms at', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
+            });
+    }, 5000);
+
+    // Add the new WebSocket connection and its corresponding interval to the map
+    connections.set(ws, interval);
+
     ws.on('message', function (msg) {
         console.log(msg);
     });
-    console.log('socket', req.testing);
-
-    // Ping Google every 5 seconds and send the latency over the WebSocket connection
-    setInterval(function() {
-        ping.promise.probe('google.com')
-            .then(function (res) {
-                ws.send(res.time);
-            });
-    }, 5000);
+    ws.on('close', function () {
+        // Clear the interval associated with the closed WebSocket connection
+        clearInterval(connections.get(ws));
+        // Remove the closed WebSocket connection and its corresponding interval from the map
+        connections.delete(ws);
+    });
 });
 
 app.listen(3000, () => {

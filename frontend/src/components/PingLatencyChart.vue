@@ -1,6 +1,4 @@
 <template>
-  <button @click="simulateError">Simulate Error</button>
-  <button @click="simulateClose">Simulate Close</button>
   <Chart ref="primeChart" type="line" :data="chartData" :options="chartOptions" class="h-30rem"/>
 </template>
 
@@ -18,14 +16,6 @@ onMounted(async () => {
   // await shiftData();
   ws.value = setupWebSocket(updateChartData);
 });
-
-const simulateError = () => {
-  ws.value.handleError(new Error('Simulated error'));
-};
-
-const simulateClose = () => {
-  ws.value.handleClose();
-};
 
 function getGradient(chart) {
   const ctx = chart.ctx;
@@ -52,8 +42,8 @@ let chartData = {
 const chartOptions = {
   responsive: true,
   animation: {
-    duration: 2500, // Duration of the animation in milliseconds
-    easing: 'easeInOutQuad', // Easing function to use
+    duration: 100, // Duration of the animation in milliseconds
+    easing: 'linear', // Easing function to use
   },
   legend: {
     display: true,
@@ -120,11 +110,18 @@ const updateChartData = (latency) => {
   // Handle special values
   if (latency === -1) {
     // Add a special data point to the chart to indicate an error or disconnection
-    chartData.datasets[0].data.push(null);
+    chartData.datasets[0].data.push(0);
     chartData.labels.push('DEDGE');
   } else {
-    // Shift the old data
-    if (chartData.datasets[0].data.length > 7) {
+    // Add the new latency value
+    chartData.datasets[0].data.push(latency);
+
+    // Add the current time as a label
+    let now = new Date();
+    chartData.labels.push(now);
+
+    // Shift the old data if the length exceeds the window size
+    if (chartData.datasets[0].data.length > 8) {
       let dataArray = Array.from(chartData.datasets[0].data);
       dataArray.shift();
       chartData.datasets[0].data = dataArray;
@@ -133,13 +130,6 @@ const updateChartData = (latency) => {
       labelArray.shift();
       chartData.labels = labelArray;
     }
-
-    // Add the new latency value
-    chartData.datasets[0].data.push(latency);
-
-    // Add the current time as a label
-    let now = new Date();
-    chartData.labels.push(now);
   }
 
   // Update the chart
