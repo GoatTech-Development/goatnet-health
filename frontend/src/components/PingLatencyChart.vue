@@ -20,10 +20,10 @@ export default {
         minValueScale: 1.1,
         maxValueScale: 1.1,
         grid: {
-          strokeStyle: 'rgb(125, 0, 0)', fillStyle: 'rgb(60, 0, 0)',
+          strokeStyle: 'rgb(0,46,125)', fillStyle: 'rgb(0,10,59)',
           lineWidth: 1, millisPerLine: 250, verticalSections: 6,
         },
-        labels: {fillStyle: 'rgb(60, 0, 0)'}
+        labels: {fillStyle: 'rgb(255,255,255)'}
       });
 
       line1.value = new TimeSeries();

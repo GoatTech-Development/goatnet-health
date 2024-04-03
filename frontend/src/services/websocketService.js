@@ -8,8 +8,14 @@ export const setupWebSocket = (updateChartData) => {
 
     ws.onmessage = (message) => {
         console.log('Received:', message.data, 'at', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
-        // Update the chart data with the new latency value
-        updateChartData(parseInt(message.data));
+        // Check if the received message data is -1
+        if (parseInt(message.data) === -1) {
+            // Append a special value to the TimeSeries to represent an internet outage
+            updateChartData(1000);  // Adjust this value as needed
+        } else {
+            // Update the chart data with the new latency value
+            updateChartData(parseInt(message.data));
+        }
     };
 
     ws.onerror = (error) => {

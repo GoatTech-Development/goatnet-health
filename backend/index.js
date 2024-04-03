@@ -11,12 +11,20 @@ app.ws('/', function (ws, req) {
     var interval = setInterval(function () {
         ping.promise.probe('google.com')
             .then(function (res) {
-                // Send the latency to the active WebSocket connection
-                if (ws.readyState === ws.OPEN) {
-                    ws.send(res.time);
+                if (res.alive) {
+                    // Send the latency to the active WebSocket connection
+                    if (ws.readyState === ws.OPEN) {
+                        ws.send(res.time);
+                    }
+                    // log the latency to the console with time in PST
+                    console.log('Latency:', res.time, 'ms at', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
+                } else {
+                    // Send a special value to indicate that the internet is out
+                    if (ws.readyState === ws.OPEN) {
+                        ws.send(-1);
+                    }
+                    console.log('Internet is out at', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
                 }
-                // log the latency to the console with time in PST
-                console.log('Latency:', res.time, 'ms at', new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
             });
     }, 5000);
 
