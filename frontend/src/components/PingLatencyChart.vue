@@ -5,15 +5,13 @@
 <script setup>
 import 'chartjs-adapter-date-fns';
 import Chart from 'primevue/chart';
-import {nextTick, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {setupWebSocket} from "@/services/websocketService.js";
 
 // Setup websocket connection
 const ws = ref(null);
 
 onMounted(async () => {
-  // await nextTick();
-  // await shiftData();
   ws.value = setupWebSocket(updateChartData);
 });
 
