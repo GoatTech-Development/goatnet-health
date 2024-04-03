@@ -12,7 +12,7 @@ import {setupWebSocket} from "@/services/websocketService.js";
 const ws = ref(null);
 
 onMounted(async () => {
-  await nextTick();
+  // await nextTick();
   // await shiftData();
   ws.value = setupWebSocket(updateChartData);
 });
@@ -106,35 +106,28 @@ const chartOptions = {
 
 const primeChart = ref();
 
+const windowSize = 8; // Size of the sliding window
+
+let latencies = []; // Array to store the last N latencies
+
 const updateChartData = (latency) => {
-  // Handle special values
-  if (latency === -1) {
-    // Add a special data point to the chart to indicate an error or disconnection
-    chartData.datasets[0].data.push(0);
-    chartData.labels.push('DEDGE');
-  } else {
-    // Add the new latency value
-    chartData.datasets[0].data.push(latency);
+  // Add the new latency to the end of the array
+  latencies.push(latency);
 
-    // Add the current time as a label
-    let now = new Date();
-    chartData.labels.push(now);
-
-    // Shift the old data if the length exceeds the window size
-    if (chartData.datasets[0].data.length > 8) {
-      let dataArray = Array.from(chartData.datasets[0].data);
-      dataArray.shift();
-      chartData.datasets[0].data = dataArray;
-
-      let labelArray = Array.from(chartData.labels);
-      labelArray.shift();
-      chartData.labels = labelArray;
-    }
+  // If the array size exceeds the window size, remove the oldest latency from the start of the array
+  if (latencies.length > windowSize) {
+    latencies.shift();
   }
 
-  // Update the chart
+  // Update the chart data and labels
+  chartData.datasets[0].data = [...latencies];
+  chartData.labels = latencies.map((_, i) => new Date(Date.now() - (windowSize - i - 1) * 1000));
+};
+
+// Update the chart data at a set interval
+setInterval(() => {
   if (primeChart.value !== null && primeChart.value !== undefined) {
     primeChart.value.refresh();
   }
-};
+}, 1000); // Adjust the interval as needed// Adjust the interval as needed
 </script>
