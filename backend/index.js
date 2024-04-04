@@ -8,7 +8,7 @@ app.use(cors({
   origin: "http://localhost:8080"
 }));
 
-app.ws("/", function(ws, req) {
+app.ws("/ws", function(ws, req) {
   pingService.startPing(ws);
 
   ws.on("message", function(msg) {
