@@ -9,8 +9,8 @@ build:
 preview:
     cd frontend && npm run preview
 
-prettier:
-    prettier --write frontend/src
+lint:
+    cd frontend && npm run lint
 
 cloc:
     cloc --exclude-list-file=.clocignore $(git ls-files)
