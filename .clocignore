@@ -1,0 +1,16 @@
+backend/Dockerfile
+backend/package-lock.json
+backend/package.json
+frontend/.env.development
+frontend/.env.production
+frontend/Dockerfile
+frontend/README.md
+frontend/jsconfig.json
+frontend/package-lock.json
+frontend/package.json
+frontend/public/favicon.ico
+frontend/src/assets/base.css
+frontend/src/assets/logo.svg
+frontend/src/assets/main.css
+justfile
+package-lock.json
