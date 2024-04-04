@@ -20,3 +20,9 @@ cloc:
 
 clean:
     rm -rf frontend/dist
+
+prune-prod:
+    cd frontend && npm prune --production
+
+prune-dev:
+    cd frontend && npm prune --production=false
