@@ -4,9 +4,9 @@
 </template>
 
 <script>
-import {onBeforeUnmount, onMounted, ref} from 'vue';
-import {SmoothieChart, TimeSeries} from 'smoothie';
-import {setupWebSocket} from "@/services/websocketService.js";
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import { SmoothieChart, TimeSeries } from "smoothie";
+import { setupWebSocket } from "@/services/websocketService.js";
 
 export default {
   setup() {
@@ -18,7 +18,7 @@ export default {
 
     const toggleOutage = () => {
       if (ws && ws.ws) {
-        ws.ws.send('toggleOutage');
+        ws.ws.send("toggleOutage");
       }
     };
 
@@ -28,24 +28,35 @@ export default {
         maxValueScale: 1.1,
         grid: {
           borderVisible: false,
-          strokeStyle: 'rgb(0,46,125)', fillStyle: 'rgb(0,10,59)',
-          lineWidth: 1, millisPerLine: 250, verticalSections: 6,
+          strokeStyle: "rgb(0,46,125)",
+          fillStyle: "rgb(0,10,59)",
+          lineWidth: 1,
+          millisPerLine: 250,
+          verticalSections: 6,
         },
         labels: {
-          fillStyle: 'rgb(255,255,255)'
-
-        }
+          fillStyle: "rgb(255,255,255)",
+        },
       });
 
       lineUp.value = new TimeSeries();
       lineOutage.value = new TimeSeries();
 
-      smoothie.value.addTimeSeries(lineUp.value,
-          {strokeStyle: 'rgb(0, 255, 0)', fillStyle: 'rgba(0, 255, 0, 0.4)', lineWidth: 3});
-      smoothie.value.addTimeSeries(lineOutage.value,
-          {strokeStyle: 'rgb(255, 0, 0)', fillStyle: 'rgba(255, 0, 0, 0.4)', lineWidth: 3});
+      smoothie.value.addTimeSeries(lineUp.value, {
+        strokeStyle: "rgb(0, 255, 0)",
+        fillStyle: "rgba(0, 255, 0, 0.4)",
+        lineWidth: 3,
+      });
+      smoothie.value.addTimeSeries(lineOutage.value, {
+        strokeStyle: "rgb(255, 0, 0)",
+        fillStyle: "rgba(255, 0, 0, 0.4)",
+        lineWidth: 3,
+      });
 
-      smoothie.value.streamTo(document.getElementById("mycanvas"), 5000 /*delay*/);
+      smoothie.value.streamTo(
+        document.getElementById("mycanvas"),
+        5000 /*delay*/,
+      );
     });
 
     ws = setupWebSocket((latency, isInternetOut) => {
@@ -65,7 +76,7 @@ export default {
       }
     });
 
-    return {toggleOutage};
-  }
-}
+    return { toggleOutage };
+  },
+};
 </script>
