@@ -3,7 +3,7 @@
     <h2>Internet Outage Log</h2>
     <ul>
       <li v-for="(outage, index) in outages" :key="index">
-        {{ outage }}
+        {{ formatTime(outage) }}
       </li>
     </ul>
   </div>
@@ -22,6 +22,15 @@ export default {
     },
     handleOutageEvent(event) {
       this.addOutage(event.detail);
+    },
+    formatTime(timestamp) {
+      return new Date(timestamp).toLocaleString("en-US", {
+        timeZone: "America/Los_Angeles",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
     }
   },
   mounted() {
