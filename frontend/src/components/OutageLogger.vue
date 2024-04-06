@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h2>Internet Outage Log</h2>
+    <div style="display: flex; align-items: center; justify-content: left;">
+      <h2>Internet Outage Log</h2>
+      <button @click="clearOutages">Clear Outages</button>
+    </div>
     <ul>
       <li v-for="(outage, index) in outages" :key="index">
         {{ formatTime(outage) }}
@@ -37,6 +40,10 @@ export default {
         second: "2-digit",
         hour12: true
       });
+    },
+    clearOutages() {
+      this.outages = [];
+      localStorage.setItem("outages", JSON.stringify(this.outages));
     }
   },
   mounted() {
