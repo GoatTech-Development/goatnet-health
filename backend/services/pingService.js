@@ -1,4 +1,5 @@
 var ping = require("ping");
+var config = require("../backendConfig.js");
 
 var simulateOutage = false;
 var connections = new Map();
@@ -9,7 +10,7 @@ function startPing(ws) {
       if (ws.readyState === ws.OPEN) {
         ws.send(-1);
       }
-      console.log("Simulated internet outage at", new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+      console.log("Simulated internet outage at", new Date().toLocaleString(config.locale, { timeZone: config.timeZone }));
     } else {
       ping.promise.probe("google.com")
         .then(function(result) {
@@ -17,12 +18,12 @@ function startPing(ws) {
             if (ws.readyState === ws.OPEN) {
               ws.send(result.time);
             }
-            console.log("Latency:", result.time, "ms at", new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+            console.log("Latency:", result.time, "ms at", new Date().toLocaleString(config.locale, { timeZone: config.timeZone }));
           } else {
             if (ws.readyState === ws.OPEN) {
               ws.send(-1);
             }
-            console.log("Internet is out at", new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+            console.log("Internet is out at", new Date().toLocaleString(config.locale, { timeZone: config.timeZone }));
           }
         });
     }
