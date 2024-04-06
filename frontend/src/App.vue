@@ -1,6 +1,7 @@
 <script setup>
 import HelloWorld from "./components/HelloWorld.vue";
 import PingLatencyChart from "@/components/PingLatencyChart.vue";
+import OutageLogger from "@/components/OutageLogger.vue";
 </script>
 
 <template>
@@ -19,6 +20,7 @@ import PingLatencyChart from "@/components/PingLatencyChart.vue";
 
   <main>
     <PingLatencyChart></PingLatencyChart>
+    <OutageLogger></OutageLogger>
   </main>
 </template>
 
