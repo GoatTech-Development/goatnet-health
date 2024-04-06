@@ -26,10 +26,13 @@ export default {
     formatTime(timestamp) {
       return new Date(timestamp).toLocaleString("en-US", {
         timeZone: "America/Los_Angeles",
+        year: "numeric",
+        weekday: "short",
+        month: "short",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
-        hour12: false
+        hour12: true
       });
     }
   },
