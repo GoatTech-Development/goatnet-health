@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="display: flex; align-items: center; justify-content: left;">
+    <div style="display: flex; align-items: center; justify-content: left">
       <h2>Internet Outage Log</h2>
       <button @click="clearOutages">Clear Outages</button>
     </div>
@@ -18,7 +18,7 @@ import config from "@/config.js";
 export default {
   data() {
     return {
-      outages: JSON.parse(localStorage.getItem("outages")) || []
+      outages: JSON.parse(localStorage.getItem("outages")) || [],
     };
   },
   methods: {
@@ -38,13 +38,13 @@ export default {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
-        hour12: true
+        hour12: true,
       });
     },
     clearOutages() {
       this.outages = [];
       localStorage.setItem("outages", JSON.stringify(this.outages));
-    }
+    },
   },
   mounted() {
     window.addEventListener("outage", this.handleOutageEvent);
@@ -52,6 +52,6 @@ export default {
   beforeDestroy() {
     localStorage.setItem("outages", JSON.stringify(this.outages));
     window.removeEventListener("outage", this.handleOutageEvent);
-  }
+  },
 };
 </script>

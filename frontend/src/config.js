@@ -1,4 +1,4 @@
 export default {
-  locale: 'en-US',
-  timezone: 'America/Los_Angeles'
+  locale: "en-US",
+  timezone: "America/Los_Angeles",
 };

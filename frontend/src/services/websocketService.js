@@ -13,7 +13,7 @@ export const setupWebSocket = (updateChartData) => {
       "Received:",
       message.data,
       "at",
-      new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })
+      new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
     );
     if (parseInt(message.data) === -1) {
       // Begin lineOutage with the last value from lineUp for consistent graph look
