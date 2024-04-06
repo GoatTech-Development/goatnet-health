@@ -10,22 +10,25 @@
 </template>
 
 <script>
+import config from "@/config.js";
+
 export default {
   data() {
     return {
-      outages: []
+      outages: JSON.parse(localStorage.getItem("outages")) || []
     };
   },
   methods: {
     addOutage(timestamp) {
       this.outages.push(timestamp);
+      localStorage.setItem("outages", JSON.stringify(this.outages));
     },
     handleOutageEvent(event) {
       this.addOutage(event.detail);
     },
     formatTime(timestamp) {
-      return new Date(timestamp).toLocaleString("en-US", {
-        timeZone: "America/Los_Angeles",
+      return new Date(timestamp).toLocaleString(config.locale, {
+        timeZone: config.timezone,
         year: "numeric",
         weekday: "short",
         month: "short",
@@ -37,11 +40,10 @@ export default {
     }
   },
   mounted() {
-    // Listen for the 'outage' event
     window.addEventListener("outage", this.handleOutageEvent);
   },
   beforeDestroy() {
-    // Remove the event listener when the component is destroyed
+    localStorage.setItem("outages", JSON.stringify(this.outages));
     window.removeEventListener("outage", this.handleOutageEvent);
   }
 };
