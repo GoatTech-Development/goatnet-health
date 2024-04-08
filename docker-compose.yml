@@ -16,6 +16,7 @@ services:
     environment:
       - VUE_APP_LOCALE=en-US
       - VUE_APP_TIMEZONE=America/Los_Angeles
+      - VUE_APP_WS_URL=ws://localhost:3000/ws
   backend:
     container_name: backend
     build:
