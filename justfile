@@ -12,6 +12,9 @@ build:
 preview:
     cd frontend && npm run preview
 
+serve:
+    cd frontend && npm run serve
+
 lint:
     cd frontend && npm run lint
 
