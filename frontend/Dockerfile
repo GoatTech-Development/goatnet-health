@@ -21,4 +21,4 @@ COPY --from=build /usr/src/app/package.json ./
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+CMD ["npx", "serve", "-s", "dist", "-l", "5000"]
