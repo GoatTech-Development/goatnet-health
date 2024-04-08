@@ -1,4 +1,4 @@
 module.exports = {
-  locale: "en-US",
-  timezone: "America/Los_Angeles"
+  locale: process.env.LOCALE || "en-US",
+  timezone: process.env.TIMEZONE || "America/Los_Angeles"
 };

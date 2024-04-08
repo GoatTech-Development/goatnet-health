@@ -6,11 +6,17 @@ start-server:
 dev:
     cd frontend && npm run dev
 
-build:
+build-frontend:
     cd frontend && npm run build
+
+build-docker:
+    docker compose build
 
 preview:
     cd frontend && npm run preview
+
+serve:
+    cd frontend && npm run serve
 
 lint:
     cd frontend && npm run lint
