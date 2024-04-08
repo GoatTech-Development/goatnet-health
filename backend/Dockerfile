@@ -17,6 +17,8 @@ WORKDIR /usr/src/app
 # Copy only the necessary files from the build stage
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/index.js ./index.js
+COPY --from=build /usr/src/app/services ./services
+COPY --from=build /usr/src/app/backendConfig.js ./backendConfig.js
 COPY --from=build /usr/src/app/package.json ./
 
 EXPOSE 3000
