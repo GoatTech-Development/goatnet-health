@@ -1,6 +1,8 @@
+import config from "@/config.js";
+
 let lastLatency = null;
 export const setupWebSocket = (updateChartData) => {
-  const ws = new WebSocket("ws://localhost:3000/ws");
+  const ws = new WebSocket(config.wsUrl);
   let isOutageOngoing = false;
 
   ws.onopen = () => {
