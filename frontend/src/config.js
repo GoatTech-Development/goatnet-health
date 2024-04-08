@@ -1,4 +1,4 @@
 export default {
-  locale: "en-US",
-  timezone: "America/Los_Angeles",
+  locale: import.meta.env.VUE_APP_LOCALE || "en-US",
+  timezone: import.meta.env.VUE_APP_TIMEZONE || "America/Los_Angeles"
 };
