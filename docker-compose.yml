@@ -5,8 +5,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/usr/src/app
     depends_on:
       - backend
     environment:
@@ -18,5 +16,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3000"
-    volumes:
-      - ./backend:/usr/src/app
+    environment:
+      - LOCALE=en-US
+      - TIMEZONE=America/Los_Angeles
