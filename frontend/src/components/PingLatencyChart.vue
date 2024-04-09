@@ -58,7 +58,7 @@ export default {
         5000 /*delay*/
       );
 
-      window.addEventListener("outage", handleOutageEvent);
+      window.addEventListener("dead", handleSocketDied);
     });
 
     ws = setupWebSocket((latency, isInternetOut) => {
@@ -72,17 +72,14 @@ export default {
     });
 
     // Handle emitted outage event from WebSocketService
-    const handleOutageEvent = (event) => {
-      if (ws && ws.ws) {
-        console.log("closed a sus ws connection");
-        ws.ws.close();
+    const handleSocketDied = (event) => {
+      if (!interval && !ws.ws) {
+        // Append the special value to the new TimeSeries immediately at an interval of 5 seconds
+        interval = setInterval(() => {
+          lineOutage.value.append(Date.now(), -1);
+          console.log("appended outage value at time: ", new Date().toLocaleString());
+        }, 5000);
       }
-      console.log("handling outage event at time: ", new Date().toLocaleString());
-      // Append the special value to the new TimeSeries immediately at an interval of 5 seconds
-      interval = setInterval(() => {
-        lineOutage.value.append(Date.now(), -1);
-        console.log("appended outage value at time: ", new Date().toLocaleString());
-      }, 5000);
     };
 
     onBeforeUnmount(() => {

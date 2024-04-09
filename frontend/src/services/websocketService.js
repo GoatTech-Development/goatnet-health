@@ -1,15 +1,25 @@
 import config from "@/config.js";
+import ReconnectingWebSocket from "reconnecting-websocket";
 
 let lastLatency = null;
 let interval = null;
 
 export const setupWebSocket = (updateChartData) => {
-  const ws = new WebSocket(config.wsUrl);
+  const ws = new ReconnectingWebSocket(config.wsUrl, [], {
+    maxReconnectionDelay: 10000, // Initial reconnection delay in milliseconds
+    reconnectionDelayGrowFactor: 1.1, // Grow factor for reconnection delay
+  });
   let isOutageOngoing = false;
 
   ws.onopen = () => {
     console.log("Connected to server at time: ", new Date().toLocaleString());
     ws.send("Hello from client at time: " + new Date().toLocaleString());
+
+    // Clear any existing interval when the WebSocket reconnects
+    if (interval) {
+      clearInterval(interval);
+      interval = null;
+    }
   };
 
   ws.onmessage = (message) => {
@@ -37,11 +47,9 @@ export const setupWebSocket = (updateChartData) => {
   };
 
   ws.onclose = () => {
-    console.log("Disconnected from server at time: ", new Date().toLocaleString());
-    // Emit the 'outage' event
-    const event = new CustomEvent("outage", { detail: new Date() });
+    console.log("Disconnected from socket at time: ", new Date().toLocaleString());
+    const event = new CustomEvent("dead", { detail: new Date() });
     window.dispatchEvent(event);
-    console.log("Dispatched outage event at time: ", new Date().toLocaleString());
 
     // Clear any existing interval
     if (interval) {
@@ -50,12 +58,6 @@ export const setupWebSocket = (updateChartData) => {
 
     // Immediately append the lastLatency to the lineOutage TimeSeries
     updateChartData(lastLatency, true);
-
-    // Set up a new interval to append the lastLatency to the lineOutage TimeSeries every 5 seconds
-    interval = setInterval(() => {
-      updateChartData(lastLatency, true);
-    }, 5000);
-
   };
 
   return { ws };
