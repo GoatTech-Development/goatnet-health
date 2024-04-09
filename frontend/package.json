@@ -16,6 +16,7 @@
     "date-fns": "^3.6.0",
     "ping.js": "^0.3.0",
     "primevue": "^3.50.0",
+    "reconnecting-websocket": "^4.4.0",
     "serve": "^14.2.1",
     "smoothie": "^1.36.1",
     "vue": "^3.4.21",

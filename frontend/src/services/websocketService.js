@@ -1,22 +1,29 @@
 import config from "@/config.js";
+import ReconnectingWebSocket from "reconnecting-websocket";
 
 let lastLatency = null;
+let interval = null;
+
 export const setupWebSocket = (updateChartData) => {
-  const ws = new WebSocket(config.wsUrl);
+  const ws = new ReconnectingWebSocket(config.wsUrl, [], {
+    maxReconnectionDelay: 10000, // Initial reconnection delay in milliseconds
+    reconnectionDelayGrowFactor: 1.1, // Grow factor for reconnection delay
+  });
   let isOutageOngoing = false;
 
   ws.onopen = () => {
-    console.log("Connected to server");
-    ws.send("Hello from client");
+    console.log("Connected to server at time: ", new Date().toLocaleString());
+    ws.send("Hello from client at time: " + new Date().toLocaleString());
+
+    // Clear any existing interval when the WebSocket reconnects
+    if (interval) {
+      clearInterval(interval);
+      interval = null;
+    }
   };
 
   ws.onmessage = (message) => {
-    console.log(
-      "Received:",
-      message.data,
-      "at",
-      new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" }),
-    );
+    console.log("Received:", message.data, "at", new Date().toLocaleString());
     if (parseInt(message.data) === -1) {
       // Begin lineOutage with the last value from lineUp for consistent graph look
       updateChartData(lastLatency, true);
@@ -36,11 +43,21 @@ export const setupWebSocket = (updateChartData) => {
   };
 
   ws.onerror = (error) => {
-    console.error("WebSocket error:", error);
+    console.error("WebSocket error at time:", new Date().toLocaleString());
   };
 
   ws.onclose = () => {
-    console.log("Disconnected from server");
+    console.log("Disconnected from socket at time: ", new Date().toLocaleString());
+    const event = new CustomEvent("dead", { detail: new Date() });
+    window.dispatchEvent(event);
+
+    // Clear any existing interval
+    if (interval) {
+      clearInterval(interval);
+    }
+
+    // Immediately append the lastLatency to the lineOutage TimeSeries
+    updateChartData(lastLatency, true);
   };
 
   return { ws };
