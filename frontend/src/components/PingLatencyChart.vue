@@ -32,11 +32,11 @@ export default {
           fillStyle: "rgb(0,10,59)",
           lineWidth: 1,
           millisPerLine: 250,
-          verticalSections: 6,
+          verticalSections: 6
         },
         labels: {
-          fillStyle: "rgb(255,255,255)",
-        },
+          fillStyle: "rgb(255,255,255)"
+        }
       });
 
       lineUp.value = new TimeSeries();
@@ -45,18 +45,20 @@ export default {
       smoothie.value.addTimeSeries(lineUp.value, {
         strokeStyle: "rgb(0, 255, 0)",
         fillStyle: "rgba(0, 255, 0, 0.4)",
-        lineWidth: 3,
+        lineWidth: 3
       });
       smoothie.value.addTimeSeries(lineOutage.value, {
         strokeStyle: "rgb(255, 0, 0)",
         fillStyle: "rgba(255, 0, 0, 0.4)",
-        lineWidth: 3,
+        lineWidth: 3
       });
 
       smoothie.value.streamTo(
         document.getElementById("mycanvas"),
-        5000 /*delay*/,
+        5000 /*delay*/
       );
+
+      window.addEventListener("outage", handleOutageEvent);
     });
 
     ws = setupWebSocket((latency, isInternetOut) => {
@@ -69,6 +71,20 @@ export default {
       }
     });
 
+    // Handle emitted outage event from WebSocketService
+    const handleOutageEvent = (event) => {
+      if (ws && ws.ws) {
+        console.log("closed a sus ws connection");
+        ws.ws.close();
+      }
+      console.log("handling outage event at time: ", new Date().toLocaleString());
+      // Append the special value to the new TimeSeries immediately at an interval of 5 seconds
+      interval = setInterval(() => {
+        lineOutage.value.append(Date.now(), -1);
+        console.log("appended outage value at time: ", new Date().toLocaleString());
+      }, 5000);
+    };
+
     onBeforeUnmount(() => {
       clearInterval(interval);
       if (ws && ws.ws) {
@@ -77,6 +93,6 @@ export default {
     });
 
     return { toggleOutage };
-  },
+  }
 };
 </script>
