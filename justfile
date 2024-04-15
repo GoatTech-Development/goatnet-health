@@ -18,7 +18,7 @@ preview:
 serve:
     cd frontend && npm run serve
 
-lint:
+lint-frontend:
     cd frontend && npm run lint
 
 cloc:
