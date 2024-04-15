@@ -7,7 +7,7 @@ let interval = null;
 export const setupWebSocket = (updateChartData) => {
   const ws = new ReconnectingWebSocket(config.wsUrl, [], {
     maxReconnectionDelay: 10000, // Initial reconnection delay in milliseconds
-    reconnectionDelayGrowFactor: 1.1, // Grow factor for reconnection delay
+    reconnectionDelayGrowFactor: 1.1 // Grow factor for reconnection delay
   });
   let isOutageOngoing = false;
 
@@ -24,11 +24,14 @@ export const setupWebSocket = (updateChartData) => {
 
   ws.onmessage = (message) => {
     console.log("Received:", message.data, "at", new Date().toLocaleString());
+
+    // Below only occurs when "Toggle Outage" button is clicked because if socket disconnects, this won't be called
     if (parseInt(message.data) === -1) {
       // Begin lineOutage with the last value from lineUp for consistent graph look
       updateChartData(lastLatency, true);
+
       if (!isOutageOngoing) {
-        // Emit the 'outage' event with the current timestamp
+        // Emit the 'outage' event for OutageLogger.vue with the current timestamp
         const event = new CustomEvent("outage", { detail: new Date() });
         window.dispatchEvent(event);
         isOutageOngoing = true;
@@ -43,17 +46,20 @@ export const setupWebSocket = (updateChartData) => {
   };
 
   ws.onerror = (error) => {
-    console.error("WebSocket error at time:", new Date().toLocaleString());
+    console.error("WebSocket error: ", error.error, " at time:", new Date().toLocaleString());
   };
 
   ws.onclose = () => {
-    console.log("Disconnected from socket at time: ", new Date().toLocaleString());
-    const event = new CustomEvent("dead", { detail: new Date() });
-    window.dispatchEvent(event);
+    console.log(
+      "Disconnected from socket at time: ",
+      new Date().toLocaleString()
+    );
 
-    // Clear any existing interval
-    if (interval) {
-      clearInterval(interval);
+    if (!isOutageOngoing) {
+      // Emit the 'outage' event for OutageLogger.vue with the current timestamp
+      const event = new CustomEvent("outage", { detail: new Date() });
+      window.dispatchEvent(event);
+      isOutageOngoing = true;
     }
 
     // Immediately append the lastLatency to the lineOutage TimeSeries
