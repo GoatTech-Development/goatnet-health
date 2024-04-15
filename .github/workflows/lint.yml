@@ -19,8 +19,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Node.js dependencies
-        run: npm ci
+        run: |
+          cd frontend &&
+          npm ci
 
       - name: Run prettier-eslint
         run: |
+          cd frontend &&
           npm run lint
