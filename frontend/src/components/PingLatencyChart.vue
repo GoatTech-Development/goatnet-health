@@ -57,30 +57,15 @@ export default {
         document.getElementById("mycanvas"),
         5000 /*delay*/
       );
-
-      window.addEventListener("dead", handleSocketDied);
     });
 
     ws = setupWebSocket((latency, isInternetOut) => {
       if (isInternetOut) {
-        // Append the special value to the new TimeSeries immediately
         lineOutage.value.append(Date.now(), latency);
       } else {
-        // Append the latency value to the original TimeSeries
         lineUp.value.append(Date.now(), latency);
       }
     });
-
-    // Handle emitted outage event from WebSocketService
-    const handleSocketDied = (event) => {
-      if (!interval && !ws.ws) {
-        // Append the special value to the new TimeSeries immediately at an interval of 5 seconds
-        interval = setInterval(() => {
-          lineOutage.value.append(Date.now(), -1);
-          console.log("appended outage value at time: ", new Date().toLocaleString());
-        }, 5000);
-      }
-    };
 
     onBeforeUnmount(() => {
       clearInterval(interval);
