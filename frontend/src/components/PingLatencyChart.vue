@@ -8,7 +8,7 @@ import { defineComponent } from 'vue'
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { SmoothieChart, TimeSeries } from "smoothie";
 import { setupWebSocket } from "@/services/websocketService.ts";
-import { WebSocketObject } from "@/types/WebSocketObject";
+import type { WebSocketObject } from "@/types/WebSocketObject";
 
 export default defineComponent({
   setup() {
