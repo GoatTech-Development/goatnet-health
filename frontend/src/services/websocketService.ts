@@ -1,4 +1,5 @@
-import ReconnectingWebSocket, { Event as WebSocketEvent } from "reconnecting-websocket";
+import type { Event as WebSocketEvent } from "reconnecting-websocket";
+import ReconnectingWebSocket from "reconnecting-websocket";
 import config from "@/config.js";
 
 let lastLatency: number | null = null;
