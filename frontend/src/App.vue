@@ -1,5 +1,5 @@
-<script setup>
-import HelloWorld from "./components/HelloWorld.vue";
+<script setup lang="ts">
+import HelloWorld from "@/components/HelloWorld.vue";
 import PingLatencyChart from "@/components/PingLatencyChart.vue";
 import OutageLogger from "@/components/OutageLogger.vue";
 </script>
