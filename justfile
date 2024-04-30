@@ -1,7 +1,7 @@
 PHONY: clean
 
 start-server:
-    cd backend && node index.js
+    cd backend && node index.ts
 
 dev:
     cd frontend && npm run dev

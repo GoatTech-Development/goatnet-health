@@ -1,24 +1,26 @@
-var express = require("express");
-var app = express();
-var expressWs = require("express-ws")(app);
-var cors = require("cors");
-var pingService = require("./services/pingService");
+const express = require('express');
+const expressWs = require('express-ws');
+const cors = require('cors');
+const pingService = require('./services/pingService');
+
+const app = express();
+expressWs(app);
 
 app.use(cors({
   origin: "http://localhost:8080"
 }));
 
-app.ws("/ws", function(ws, req) {
+app.ws("/ws", (ws: any) => {
   pingService.startPing(ws);
 
-  ws.on("message", function(msg) {
+  ws.on("message", (msg: string) => {
     console.log(msg);
     if (msg === "toggleOutage") {
       pingService.toggleOutage();
     }
   });
 
-  ws.on("close", function() {
+  ws.on("close", () => {
     pingService.stopPing(ws);
   });
 });
