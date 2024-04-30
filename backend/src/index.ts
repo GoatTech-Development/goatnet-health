@@ -7,11 +7,13 @@ const expressServer = express();           // Type = Express
 const wsServer = expressWs(expressServer); // Type = expressWs.Instance
 const server = wsServer.app;               // type = wsExpress.Application
 
+const router = express.Router() as expressWs.Router;
+
 expressServer.use(cors({
   origin: "http://localhost:8080"
 }));
 
-expressServer.ws("/ws", (ws: expressWs.WebSocket) => {
+router.ws("/ws", (ws) => {
   pingService.startPing(ws);
 
   ws.on("message", (msg: string) => {
