@@ -1,5 +1,5 @@
 import * as ping from "ping";
-import { locale, timezone } from "../backendConfig";
+import { locale, timezone } from "../../backendConfig";
 import { WebSocket } from 'ws';
 
 let simulateOutage = false;
@@ -42,7 +42,7 @@ function toggleOutage() {
   simulateOutage = !simulateOutage;
 }
 
-module.exports = {
+export {
   startPing,
   stopPing,
   toggleOutage
