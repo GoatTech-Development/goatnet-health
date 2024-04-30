@@ -1,11 +1,12 @@
-var ping = require("ping");
-var config = require("../backendConfig.js");
+import * as ping from "ping";
+import config = require("../backendConfig.js");
+import { WebSocket } from 'ws';
 
-var simulateOutage = false;
-var connections = new Map();
+let simulateOutage = false;
+const connections = new Map();
 
-function startPing(ws) {
-  var interval = setInterval(function() {
+function startPing(ws: WebSocket) {
+  let interval = setInterval(function() {
     if (simulateOutage) {
       if (ws.readyState === ws.OPEN) {
         ws.send(-1);
@@ -32,7 +33,7 @@ function startPing(ws) {
   connections.set(ws, interval);
 }
 
-function stopPing(ws) {
+function stopPing(ws: WebSocket) {
   clearInterval(connections.get(ws));
   connections.delete(ws);
 }
