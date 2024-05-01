@@ -5,7 +5,6 @@ import * as pingService from './services/pingService';
 
 const expressServer = express();           // Type = Express
 const wsServer = expressWs(expressServer); // Type = expressWs.Instance
-const server = wsServer.app;               // type = wsExpress.Application
 
 const router = express.Router() as expressWs.Router;
 
