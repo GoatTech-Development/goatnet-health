@@ -1,17 +1,26 @@
 {
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "goatnet-health backend",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
+    "@types/express-ws": "^3.0.4",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-ws": "^5.0.2",
     "ping": "^0.4.4"
   },
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "goatnet-health backend",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Neal Hitzfield",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/ping": "^0.4.4",
+    "@types/ws": "^8.5.10"
+  }
 }
