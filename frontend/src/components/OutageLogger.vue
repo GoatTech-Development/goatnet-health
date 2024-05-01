@@ -23,7 +23,7 @@ interface OutageEvent extends Event {
 export default defineComponent({
   data() {
     return {
-      outages: JSON.parse(localStorage.getItem("outages") || "[]"),
+      outages: JSON.parse(localStorage.getItem("outages") || "[]")
     };
   },
   methods: {
@@ -44,13 +44,13 @@ export default defineComponent({
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
-        hour12: true,
+        hour12: true
       });
     },
     clearOutages() {
       this.outages = [];
       localStorage.setItem("outages", JSON.stringify(this.outages));
-    },
+    }
   },
   mounted() {
     window.addEventListener("outage", this.handleOutageEvent);
@@ -58,6 +58,6 @@ export default defineComponent({
   beforeUnmount() {
     localStorage.setItem("outages", JSON.stringify(this.outages));
     window.removeEventListener("outage", this.handleOutageEvent);
-  },
-};
+  }
+});
 </script>
