@@ -4,8 +4,6 @@ import cors from "cors";
 import * as pingService from './services/pingService';
 
 const expressServer = express();           // Type = Express
-const wsServer = expressWs(expressServer); // Type = expressWs.Instance
-
 const router = express.Router() as expressWs.Router;
 
 expressServer.use(cors({
