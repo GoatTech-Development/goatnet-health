@@ -36,7 +36,7 @@ export const setupWebSocket = (updateChartData: UpdateChartData) => {
 
       if (!isOutageOngoing) {
         // Emit the 'outage' event for OutageLogger.vue with the current timestamp
-        const event = new CustomEvent("outage", { detail: new Date() });
+        const event = new CustomEvent("outage", { detail: new Date().getTime() });
         window.dispatchEvent(event);
         isOutageOngoing = true;
       }

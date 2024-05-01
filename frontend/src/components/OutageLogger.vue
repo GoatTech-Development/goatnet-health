@@ -12,24 +12,29 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import config from "@/config.js";
+import { defineComponent } from "vue";
 
-export default {
+interface OutageEvent extends Event {
+  detail: number;
+}
+
+export default defineComponent({
   data() {
     return {
-      outages: JSON.parse(localStorage.getItem("outages")) || [],
+      outages: JSON.parse(localStorage.getItem("outages") || "[]"),
     };
   },
   methods: {
-    addOutage(timestamp) {
+    addOutage(timestamp: number) {
       this.outages.push(timestamp);
       localStorage.setItem("outages", JSON.stringify(this.outages));
     },
-    handleOutageEvent(event) {
+    handleOutageEvent(event: OutageEvent) {
       this.addOutage(event.detail);
     },
-    formatTime(timestamp) {
+    formatTime(timestamp: number) {
       return new Date(timestamp).toLocaleString(config.locale, {
         timeZone: config.timezone,
         year: "numeric",
@@ -50,7 +55,7 @@ export default {
   mounted() {
     window.addEventListener("outage", this.handleOutageEvent);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     localStorage.setItem("outages", JSON.stringify(this.outages));
     window.removeEventListener("outage", this.handleOutageEvent);
   },
