@@ -15,13 +15,18 @@
 <script lang="ts">
 import config from "@/config.js";
 import { defineComponent, onBeforeUnmount, onMounted } from "vue";
-import { useEventListener } from '@vueuse/core'
+import { useEventListener } from "@vueuse/core";
 
 interface OutageEvent extends Event {
   detail: number;
 }
 
 export default defineComponent({
+  mounted() {
+    onMounted(() => {
+      useEventListener(window, "outage", this.handleOutageEvent);
+    });
+  },
   data() {
     return {
       outages: JSON.parse(localStorage.getItem("outages") || "[]")
@@ -50,14 +55,9 @@ export default defineComponent({
       localStorage.setItem("outages", JSON.stringify(this.outages));
     }
   },
-  mounted() {
-    onMounted(() => {
-      useEventListener(window, 'outage', this.handleOutageEvent);
-    });
-  },
   beforeUnmount() {
     onBeforeUnmount(() => {
-      useEventListener(window, 'outage', this.handleOutageEvent);
+      useEventListener(window, "outage", this.handleOutageEvent);
     });
     localStorage.setItem("outages", JSON.stringify(this.outages));
   }
