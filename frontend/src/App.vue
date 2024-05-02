@@ -2,6 +2,11 @@
 import HelloWorld from "@/components/HelloWorld.vue";
 import PingLatencyChart from "@/components/PingLatencyChart.vue";
 import OutageLogger from "@/components/OutageLogger.vue";
+import { onMounted } from "vue";
+
+onMounted(() => {
+  document.title = "GoatNet Dashboard";
+});
 </script>
 
 <template>
