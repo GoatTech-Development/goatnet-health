@@ -11,6 +11,7 @@
     "serve": "serve --single dist --listen 5000"
   },
   "dependencies": {
+    "@vueuse/core": "^10.9.0",
     "chart.js": "^4.4.2",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
