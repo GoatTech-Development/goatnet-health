@@ -14,7 +14,8 @@
 
 <script lang="ts">
 import config from "@/config.js";
-import { defineComponent } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted } from "vue";
+import { useEventListener } from '@vueuse/core'
 
 interface OutageEvent extends Event {
   detail: number;
@@ -27,12 +28,9 @@ export default defineComponent({
     };
   },
   methods: {
-    addOutage(timestamp: number) {
-      this.outages.push(timestamp);
-      localStorage.setItem("outages", JSON.stringify(this.outages));
-    },
     handleOutageEvent(event: OutageEvent) {
-      this.addOutage(event.detail);
+      this.outages.push(event.detail);
+      localStorage.setItem("outages", JSON.stringify(this.outages));
     },
     formatTime(timestamp: number) {
       return new Date(timestamp).toLocaleString(config.locale, {
@@ -53,11 +51,15 @@ export default defineComponent({
     }
   },
   mounted() {
-    window.addEventListener("outage", this.handleOutageEvent);
+    onMounted(() => {
+      useEventListener(window, 'outage', this.handleOutageEvent);
+    });
   },
   beforeUnmount() {
+    onBeforeUnmount(() => {
+      useEventListener(window, 'outage', this.handleOutageEvent);
+    });
     localStorage.setItem("outages", JSON.stringify(this.outages));
-    window.removeEventListener("outage", this.handleOutageEvent);
   }
 });
 </script>
