@@ -20,12 +20,22 @@ export const setupWebSocket = (updateChartData: UpdateChartData) => {
     console.log("Connected to server at time: ", new Date().toLocaleString());
     ws.send("Hello from client at time: " + new Date().toLocaleString());
 
-    // Clear any existing interval when the WebSocket reconnects
+    // Clear any existing interval when/if the WebSocket reconnects
     if (interval) {
       clearInterval(interval);
       interval = null;
     }
+    // If there was an ongoing outage, emit a recovery event
+    if (isOutageOngoing) {
+      console.log("Recovery event emitted at time: ", new Date().toLocaleString());
+      const event = new CustomEvent("recovery", { detail: new Date().getTime() });
+      window.dispatchEvent(event);
+    }
+
+    // Reset isOutageOngoing to false since the connection is restored
+    isOutageOngoing = false;
   };
+
   ws.onmessage = (message: MessageEvent) => {
     console.log("Received:", message.data, "at", new Date().toLocaleString());
 
