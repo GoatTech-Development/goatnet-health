@@ -35,7 +35,6 @@ export default defineComponent({
     useEventListener(window, "outage", this.handleOutageEvent);
     useEventListener(window, "recovery", this.handleRecoveryEvent);
 
-    // Load outages from localStorage
     const storedOutages = localStorage.getItem("outageDurations");
     if (storedOutages) {
       this.outageDurations = JSON.parse(storedOutages);
@@ -75,7 +74,6 @@ export default defineComponent({
       });
     },
     formatDuration(duration: number) {
-      // Round the duration to the nearest whole number
       duration = Math.round(duration);
 
       const hours = Math.floor(duration / 3600);
@@ -95,12 +93,10 @@ export default defineComponent({
     },
     clearOutages() {
       this.outageDurations = [];
-      // Clear outages from localStorage
       localStorage.removeItem("outageDurations");
     }
   },
   beforeUnmount() {
-    // Save outages to localStorage before component is unmounted
     localStorage.setItem("outageDurations", JSON.stringify(this.outageDurations));
   }
 });
