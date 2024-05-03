@@ -9,7 +9,6 @@ import { defineComponent } from "vue";
 import { SmoothieChart, TimeSeries } from "smoothie";
 import { setupWebSocket } from "@/services/websocketService.ts";
 import type { WebSocketObject } from "@/types/WebSocketObject";
-import { useEventListener } from "@vueuse/core";
 
 export default defineComponent({
   data() {
@@ -24,9 +23,6 @@ export default defineComponent({
     };
   },
   mounted() {
-    useEventListener(window, "outage", this.handleOutageEvent);
-    useEventListener(window, "recovery", this.handleRecoveryEvent);
-
     this.smoothie = new SmoothieChart({
       minValue: 0,
       maxValueScale: 1.1,
