@@ -1,106 +1,103 @@
 <template>
-  <canvas id="mycanvas" width="500" height="200"></canvas>
+  <canvas ref="mycanvas" width="500" height="200"></canvas>
   <button @click="toggleOutage">Toggle Outage</button>
+  <p v-if="isInternetDown">Internet is down!</p>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { defineComponent } from "vue";
 import { SmoothieChart, TimeSeries } from "smoothie";
 import { setupWebSocket } from "@/services/websocketService.ts";
 import type { WebSocketObject } from "@/types/WebSocketObject";
 import { useEventListener } from "@vueuse/core";
 
-// todo: fix options api here
 export default defineComponent({
+  data() {
+    return {
+      smoothie: null as SmoothieChart | null,
+      lineUp: null as TimeSeries | null,
+      lineOutage: null as TimeSeries | null,
+      interval: undefined as number | undefined,
+      ws: null as WebSocketObject | null,
+      isInternetDown: false,
+      lastLatency: null as number | null
+    };
+  },
   mounted() {
     useEventListener(window, "outage", this.handleOutageEvent);
     useEventListener(window, "recovery", this.handleRecoveryEvent);
-  },
-  setup() {
-    const smoothie = ref<SmoothieChart | null>(null);
-    const lineUp = ref<TimeSeries | null>(null);
-    const lineOutage = ref<TimeSeries | null>(null);
-    let interval: number | undefined = undefined;
-    let ws: WebSocketObject | null = null;
 
-    const isInternetDown = ref<boolean>(false);
-    const lastLatency = ref<number | null>(null);
-
-    watch(lastLatency, (newLatency) => {
-      if (newLatency !== null) {
-        document.title = isInternetDown.value ? "DOWN" : `Latency: ${newLatency} ms`;
+    this.smoothie = new SmoothieChart({
+      minValue: 0,
+      maxValueScale: 1.1,
+      grid: {
+        borderVisible: false,
+        strokeStyle: "rgb(0,46,125)",
+        fillStyle: "rgb(0,10,59)",
+        lineWidth: 1,
+        millisPerLine: 250,
+        verticalSections: 6
+      },
+      labels: {
+        fillStyle: "rgb(255,255,255)"
       }
     });
-    const toggleOutage = () => {
-      if (ws && ws.ws) {
-        ws.ws.send("toggleOutage");
-      }
-    };
 
-    onMounted(() => {
-      smoothie.value = new SmoothieChart({
-        minValue: 0,
-        maxValueScale: 1.1,
-        grid: {
-          borderVisible: false,
-          strokeStyle: "rgb(0,46,125)",
-          fillStyle: "rgb(0,10,59)",
-          lineWidth: 1,
-          millisPerLine: 250,
-          verticalSections: 6
-        },
-        labels: {
-          fillStyle: "rgb(255,255,255)"
-        }
-      });
+    this.lineUp = new TimeSeries();
+    this.lineOutage = new TimeSeries();
 
-      lineUp.value = new TimeSeries();
-      lineOutage.value = new TimeSeries();
-
-      smoothie.value.addTimeSeries(lineUp.value, {
-        strokeStyle: "rgb(0, 255, 0)",
-        fillStyle: "rgba(0, 255, 0, 0.4)",
-        lineWidth: 3
-      });
-      smoothie.value.addTimeSeries(lineOutage.value, {
-        strokeStyle: "rgb(255, 0, 0)",
-        fillStyle: "rgba(255, 0, 0, 0.4)",
-        lineWidth: 3
-      });
-
-      smoothie.value.streamTo(
-        document.getElementById("mycanvas") as HTMLCanvasElement,
-        5000 /*delay*/
-      );
+    this.smoothie.addTimeSeries(this.lineUp, {
+      strokeStyle: "rgb(0, 255, 0)",
+      fillStyle: "rgba(0, 255, 0, 0.4)",
+      lineWidth: 3
+    });
+    this.smoothie.addTimeSeries(this.lineOutage, {
+      strokeStyle: "rgb(255, 0, 0)",
+      fillStyle: "rgba(255, 0, 0, 0.4)",
+      lineWidth: 3
     });
 
-    ws = setupWebSocket((latency: number, internetDown: boolean) => {
+    this.smoothie.streamTo(
+      (this.$refs.mycanvas as HTMLCanvasElement),
+      5000 /*delay*/
+    );
+
+    this.ws = setupWebSocket((latency: number, internetDown: boolean) => {
       if (internetDown) {
-        if (lineOutage.value) {
-          lineOutage.value.append(Date.now(), latency);
+        if (this.lineOutage) {
+          this.lineOutage.append(Date.now(), latency);
         }
-        isInternetDown.value = true;
+        this.isInternetDown = true;
+        document.title = "DOWN";
       } else {
-        if (lineUp.value) {
-          lineUp.value.append(Date.now(), latency);
+        if (this.lineUp) {
+          this.lineUp.append(Date.now(), latency);
         }
-        isInternetDown.value = false;
+        this.isInternetDown = false;
+        document.title = "Latency: " + latency + " ms";
       }
-      lastLatency.value = latency;
+      this.lastLatency = latency;
     });
-
-    onBeforeUnmount(() => {
-      clearInterval(interval);
-      if (ws && ws.ws) {
-        ws.ws.close();
-      }
-    });
-
-    return { toggleOutage };
   },
-  handleOutageEvent() {
-    // Handle outage event
-    isInternetDown.value = true;
+  methods: {
+    toggleOutage() {
+      if (this.ws && this.ws.ws) {
+        this.ws.ws.send("toggleOutage");
+      }
+    }
+  },
+  beforeUnmount() {
+    clearInterval(this.interval);
+    if (this.ws && this.ws.ws) {
+      this.ws.ws.close();
+    }
+  },
+  watch: {
+    lastLatency(newLatency) {
+      if (newLatency !== null) {
+        document.title = this.isInternetDown ? "DOWN" : `Latency: ${newLatency} ms`;
+      }
+    }
   }
 });
 </script>
