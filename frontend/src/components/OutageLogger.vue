@@ -6,7 +6,8 @@
     </div>
     <ul>
       <li v-for="(outage, index) in outageDurations" :key="index">
-        Outage started at {{ formatTime(outage.start) }} and lasted for {{ formatDuration(outage.duration) }}
+        Outage started at {{ formatTime(outage.start) }} and lasted for
+        {{ formatDuration(outage.duration) }}
       </li>
     </ul>
   </div>
@@ -43,7 +44,7 @@ export default defineComponent({
   data() {
     return {
       outageDurations: [] as OutageWithDuration[],
-      lastOutageTime: null as number | null
+      lastOutageTime: null as number | null,
     };
   },
   methods: {
@@ -57,7 +58,10 @@ export default defineComponent({
         const duration = (recoveryTime - this.lastOutageTime) / 1000; // Convert milliseconds to seconds
         this.outageDurations.push({ start: this.lastOutageTime, duration });
         // Save outages to localStorage
-        localStorage.setItem("outageDurations", JSON.stringify(this.outageDurations));
+        localStorage.setItem(
+          "outageDurations",
+          JSON.stringify(this.outageDurations),
+        );
       }
       this.lastOutageTime = null;
     },
@@ -70,7 +74,7 @@ export default defineComponent({
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
-        hour12: true
+        hour12: true,
       });
     },
     formatDuration(duration: number) {
@@ -79,26 +83,28 @@ export default defineComponent({
       const hours = Math.floor(duration / 3600);
       const minutes = Math.floor((duration % 3600) / 60);
       const seconds = duration % 60;
-      let formattedDuration = '';
+      let formattedDuration = "";
       if (hours > 0) {
-        formattedDuration += `${hours} hour${hours > 1 ? 's' : ''}`;
+        formattedDuration += `${hours} hour${hours > 1 ? "s" : ""}`;
       }
       if (minutes > 0) {
-        formattedDuration += `${formattedDuration.length > 0 ? ', ' : ''}${minutes} minute${minutes > 1 ? 's' : ''}`;
+        formattedDuration += `${formattedDuration.length > 0 ? ", " : ""}${minutes} minute${minutes > 1 ? "s" : ""}`;
       }
-      if (seconds > 0 || formattedDuration === '') {
-        formattedDuration += `${formattedDuration.length > 0 ? ', ' : ''}${seconds} second${seconds > 1 ? 's' : ''}`;
+      if (seconds > 0 || formattedDuration === "") {
+        formattedDuration += `${formattedDuration.length > 0 ? ", " : ""}${seconds} second${seconds > 1 ? "s" : ""}`;
       }
       return formattedDuration;
     },
     clearOutages() {
       this.outageDurations = [];
       localStorage.removeItem("outageDurations");
-    }
+    },
   },
   beforeUnmount() {
-    localStorage.setItem("outageDurations", JSON.stringify(this.outageDurations));
-  }
+    localStorage.setItem(
+      "outageDurations",
+      JSON.stringify(this.outageDurations),
+    );
+  },
 });
 </script>
-

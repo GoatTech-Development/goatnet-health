@@ -19,7 +19,7 @@ export default defineComponent({
       interval: undefined as number | undefined,
       ws: null as WebSocketObject | null,
       isInternetDown: false,
-      lastLatency: null as number | null
+      lastLatency: null as number | null,
     };
   },
   mounted() {
@@ -32,11 +32,11 @@ export default defineComponent({
         fillStyle: "rgb(0,10,59)",
         lineWidth: 1,
         millisPerLine: 250,
-        verticalSections: 6
+        verticalSections: 6,
       },
       labels: {
-        fillStyle: "rgb(255,255,255)"
-      }
+        fillStyle: "rgb(255,255,255)",
+      },
     });
 
     this.lineUp = new TimeSeries();
@@ -45,17 +45,17 @@ export default defineComponent({
     this.smoothie.addTimeSeries(this.lineUp, {
       strokeStyle: "rgb(0, 255, 0)",
       fillStyle: "rgba(0, 255, 0, 0.4)",
-      lineWidth: 3
+      lineWidth: 3,
     });
     this.smoothie.addTimeSeries(this.lineOutage, {
       strokeStyle: "rgb(255, 0, 0)",
       fillStyle: "rgba(255, 0, 0, 0.4)",
-      lineWidth: 3
+      lineWidth: 3,
     });
 
     this.smoothie.streamTo(
-      (this.$refs.mycanvas as HTMLCanvasElement),
-      5000 /*delay*/
+      this.$refs.mycanvas as HTMLCanvasElement,
+      5000 /*delay*/,
     );
 
     this.ws = setupWebSocket((latency: number, internetDown: boolean) => {
@@ -80,7 +80,7 @@ export default defineComponent({
       if (this.ws && this.ws.ws) {
         this.ws.ws.send("toggleOutage");
       }
-    }
+    },
   },
   beforeUnmount() {
     clearInterval(this.interval);
@@ -91,9 +91,11 @@ export default defineComponent({
   watch: {
     lastLatency(newLatency) {
       if (newLatency !== null) {
-        document.title = this.isInternetDown ? "DOWN" : `Latency: ${newLatency} ms`;
+        document.title = this.isInternetDown
+          ? "DOWN"
+          : `Latency: ${newLatency} ms`;
       }
-    }
-  }
+    },
+  },
 });
 </script>
