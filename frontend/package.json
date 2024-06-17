@@ -11,7 +11,7 @@
     "serve": "serve --single dist --listen 5000"
   },
   "dependencies": {
-    "@vueuse/core": "^10.10.0",
+    "@vueuse/core": "^10.11.0",
     "chart.js": "^4.4.3",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
@@ -20,7 +20,7 @@
     "reconnecting-websocket": "^4.4.0",
     "serve": "^14.2.3",
     "smoothie": "^1.36.1",
-    "vue": "^3.4.27",
+    "vue": "^3.4.29",
     "vue-chartjs": "^5.3.1"
   },
   "devDependencies": {
@@ -28,6 +28,6 @@
     "prettier-eslint": "^16.3.0",
     "prettier-eslint-cli": "^8.0.1",
     "typescript": "^5.4.5",
-    "vite": "^5.2.13"
+    "vite": "^5.3.1"
   }
 }
