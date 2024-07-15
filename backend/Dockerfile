@@ -1,5 +1,5 @@
 # Use a smaller base image for the build stage
-FROM node:20.15.0-alpine AS build
+FROM node:20.15.1-alpine AS build
 
 WORKDIR /usr/src/app
 
@@ -10,7 +10,7 @@ RUN npm install
 COPY . .
 
 # Use a smaller base image for the runtime stage
-FROM node:20.15.0-alpine
+FROM node:20.15.1-alpine
 
 WORKDIR /usr/src/app
 
