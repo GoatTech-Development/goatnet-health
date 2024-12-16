@@ -16,7 +16,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
     "ping.js": "^0.3.0",
-    "primevue": "^4.2.4",
+    "primevue": "^4.2.5",
     "reconnecting-websocket": "^4.4.0",
     "serve": "^14.2.4",
     "smoothie": "^1.36.1",
