@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.11.1",
-    "chart.js": "^4.4.7",
+    "chart.js": "^4.4.8",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
     "ping.js": "^0.3.0",
