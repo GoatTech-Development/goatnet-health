@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.11.1",
-    "chart.js": "^4.4.8",
+    "chart.js": "^4.4.9",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
     "ping.js": "^0.3.0",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.3",
-    "prettier-eslint": "^16.3.0",
+    "prettier-eslint": "^16.4.1",
     "prettier-eslint-cli": "^8.0.1",
     "typescript": "^5.8.3",
     "vite": "^5.4.18"
