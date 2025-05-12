@@ -16,7 +16,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
     "ping.js": "^0.3.0",
-    "primevue": "^4.3.3",
+    "primevue": "^4.3.4",
     "reconnecting-websocket": "^4.4.0",
     "serve": "^14.2.4",
     "smoothie": "^1.36.1",
@@ -24,8 +24,8 @@
     "vue-chartjs": "^5.3.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.3",
-    "prettier-eslint": "^16.4.1",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "prettier-eslint": "^16.4.2",
     "prettier-eslint-cli": "^8.0.1",
     "typescript": "^5.8.3",
     "vite": "^5.4.19"
