@@ -20,7 +20,7 @@
     "reconnecting-websocket": "^4.4.0",
     "serve": "^14.2.4",
     "smoothie": "^1.36.1",
-    "vue": "^3.5.14",
+    "vue": "^3.5.16",
     "vue-chartjs": "^5.3.2"
   },
   "devDependencies": {
