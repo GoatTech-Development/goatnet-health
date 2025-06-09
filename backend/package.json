@@ -18,8 +18,8 @@
   "author": "Neal Hitzfield",
   "license": "MIT",
   "devDependencies": {
-    "@types/cors": "^2.8.18",
-    "@types/express": "^4.17.22",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.23",
     "@types/ping": "^0.4.4",
     "@types/ws": "^8.18.1"
   }
