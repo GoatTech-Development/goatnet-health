@@ -16,11 +16,11 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^3.6.0",
     "ping.js": "^0.3.0",
-    "primevue": "^4.5.3",
+    "primevue": "^4.5.4",
     "reconnecting-websocket": "^4.4.0",
     "serve": "^14.2.5",
     "smoothie": "^1.36.1",
-    "vue": "^3.5.25",
+    "vue": "^3.5.26",
     "vue-chartjs": "^5.3.3"
   },
   "devDependencies": {
