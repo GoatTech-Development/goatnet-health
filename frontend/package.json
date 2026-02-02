@@ -24,7 +24,7 @@
     "vue-chartjs": "^5.3.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue": "^6.0.4",
     "prettier-eslint": "^16.4.2",
     "prettier-eslint-cli": "^8.0.1",
     "typescript": "^5.9.3",
