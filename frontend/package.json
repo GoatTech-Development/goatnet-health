@@ -14,7 +14,7 @@
     "@vueuse/core": "^10.11.1",
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "ping.js": "^0.3.0",
     "primevue": "^4.5.4",
     "reconnecting-websocket": "^4.4.0",
