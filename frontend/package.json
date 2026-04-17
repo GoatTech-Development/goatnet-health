@@ -27,7 +27,7 @@
     "@vitejs/plugin-vue": "^5.2.4",
     "prettier-eslint": "^16.4.2",
     "prettier-eslint-cli": "^8.0.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vite": "^5.4.21"
   }
 }
